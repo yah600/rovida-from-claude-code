@@ -454,7 +454,10 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
 };
 
 export const useAuth = () => {
-  const { currentUser } = useUser();
+  const { currentUser: legacyUser } = useUser();
+
+  // Fallback: try to get user from legacy context first, if not available return null helpers
+  const currentUser = legacyUser || { id: '', name: '', email: '', roles: [], onboarded: true };
 
   const checkPermission = (moduleName: string, action: keyof ModulePermissions): boolean => {
     if (!currentUser || !currentUser.roles || currentUser.roles.length === 0) {

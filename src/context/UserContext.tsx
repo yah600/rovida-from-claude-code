@@ -1,16 +1,18 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useCurrentUser as useNewCurrentUser, setCurrentUser as setNewCurrentUser, type CurrentUser as NewCurrentUser } from '@/shared/hooks/useCurrentUser';
+import { ROLE_LABELS } from '@/shared/roles';
 
-// Define the structure for a user's roles and scope
+// Legacy interface for backwards compat
 export interface UserRole {
-  name: string; // e.g., 'Client Super-Administrator', 'Condo Administrator', 'Owner'
+  name: string;
   scope: {
     orgId?: string;
     buildingIds?: string[];
     unitIds?: string[];
     vendorId?: string;
-    isSuper?: boolean; // For Platform Owner
+    isSuper?: boolean;
   };
 }
 
@@ -19,7 +21,7 @@ export interface CurrentUser {
   name: string;
   email: string;
   roles: UserRole[];
-  onboarded: boolean; // Added onboarded status
+  onboarded: boolean;
   phoneNumber?: string;
   notificationPreferences?: {
     emailIssues: boolean;
@@ -28,7 +30,6 @@ export interface CurrentUser {
     smsEmergency: boolean;
     smsMaintenance: boolean;
   };
-  // Add any other user-specific data needed for authorization
 }
 
 // Mock user data for demonstration purposes
