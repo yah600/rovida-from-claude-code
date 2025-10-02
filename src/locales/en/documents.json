@@ -37,16 +37,5 @@
   "reviewed": "Reviewed",
   "archived": "Archived",
   "view document action": "View document action triggered for {{title}}.",
-  "upload document action": "Upload document action triggered.",
-  "share": "Share",
-  "share document action": "Share document action triggered for {{title}}.",
-  "activity log": "Activity Log",
-  "document activity log": "Document Activity Log",
-  "track all actions related to this document": "Track all actions related to this document, including views, downloads, and shares.",
-  "no activity logs": "No activity logs found for this document.",
-  "viewed": "Viewed",
-  "downloaded": "Downloaded",
-  "shared": "Shared",
-  "edited": "Edited",
-  "uploaded": "Uploaded"
+  "upload document action": "Upload document action triggered."
 }
