@@ -11,6 +11,7 @@ interface ModulePermissions {
   approve?: boolean;
   export?: boolean;
   special?: boolean; // For specific actions like "ack/escalate/close"
+  share?: boolean; // Added share permission
 }
 
 interface PermissionsMatrix {
@@ -23,8 +24,8 @@ interface PermissionsMatrix {
 // Backend should always enforce actual RLS.
 const PERMISSIONS_MATRIX: PermissionsMatrix = {
   'Platform Owner': {
-    'Dashboard': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true },
-    'Issues': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true },
+    'Dashboard': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true, share: true },
+    'Issues': { read: true, create: true, true: true, delete: true, approve: true, export: true, special: true },
     'Emergency Center': { read: true, create: true, update: true, delete: true, approve: true, special: true },
     'Maintenance': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true },
     'Maintenance Agenda XLSX': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true },
@@ -32,13 +33,13 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Finance - Bills/Recurring/Deposits': { read: true, create: true, update: true, delete: true, approve: true, export: true },
     'Finance - Statements': { read: true, export: true },
     'Finance - Ledger/Trial Balance': { read: true, export: true },
-    'Finance - Late Fees/NSF/Reconciliation': { read: true, create: true, update: true, approve: true, export: true }, // Added create for rules
+    'Finance - Late Fees/NSF/Reconciliation': { read: true, create: true, update: true, approve: true, export: true },
     'Finance - Reports': { read: true, export: true },
     'Board': { read: true, create: true, update: true, approve: true, export: true, special: true },
     'Board - Meetings/Votes': { read: true, create: true, update: true, approve: true },
     'Architectural Requests': { read: true, create: true, update: true, delete: true, approve: true },
     'Rules': { read: true, create: true, update: true, delete: true },
-    'Rules - Violations': { read: true, create: true, update: true, delete: true }, // New module
+    'Rules - Violations': { read: true, create: true, update: true, delete: true },
     'Insurance': { read: true, create: true, update: true, delete: true },
     'Amenities': { read: true, create: true, update: true, delete: true },
     'Tenancy': { read: true, create: true, update: true, delete: true },
@@ -46,7 +47,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: true, create: true, update: true, delete: true },
     'Visitor Logs': { read: true, create: true, update: true, delete: true },
-    'Documents': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true },
+    'Documents': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true, share: true },
     'Communications': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true },
     'Integrations': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true },
     'Analytics': { read: true, create: true, update: true, delete: true, approve: true, export: true, special: true },
@@ -71,7 +72,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: true, create: true, update: true, approve: true },
     'Architectural Requests': { read: true, create: true, update: true, approve: true },
     'Rules': { read: true, create: true, update: true },
-    'Rules - Violations': { read: true, create: true, update: true, delete: true }, // New module
+    'Rules - Violations': { read: true, create: true, update: true, delete: true },
     'Insurance': { read: true, create: true, update: true },
     'Amenities': { read: true, create: true, update: true },
     'Tenancy': { read: true, create: true, update: true },
@@ -79,7 +80,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: true, create: true, update: true },
     'Visitor Logs': { read: true, create: true, update: true },
-    'Documents': { read: true, create: true, update: true, delete: true, export: true },
+    'Documents': { read: true, create: true, update: true, delete: true, export: true, share: true },
     'Communications': { read: true, create: true, update: true, delete: true, approve: true },
     'Integrations': { read: true },
     'Analytics': { read: true },
@@ -104,7 +105,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: true, create: true, update: true, approve: true },
     'Architectural Requests': { read: true, create: true, update: true, approve: true },
     'Rules': { read: true, create: true, update: true },
-    'Rules - Violations': { read: true, create: true, update: true, delete: true }, // New module
+    'Rules - Violations': { read: true, create: true, update: true, delete: true },
     'Insurance': { read: true, create: true, update: true },
     'Amenities': { read: true, create: true, update: true },
     'Tenancy': { read: true, create: true, update: true },
@@ -112,7 +113,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: true, create: true, update: true },
     'Visitor Logs': { read: true, create: true, update: true },
-    'Documents': { read: true, create: true, update: true, delete: true, export: true },
+    'Documents': { read: true, create: true, update: true, delete: true, export: true, share: true },
     'Communications': { read: true, create: true, update: true, delete: true, approve: true },
     'Integrations': { read: true },
     'Analytics': { read: true },
@@ -137,7 +138,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: true, create: true, update: true },
     'Architectural Requests': { read: true, create: true, update: true, approve: true },
     'Rules': { read: true, create: true, update: true },
-    'Rules - Violations': { read: true, create: true, update: true, delete: true }, // New module
+    'Rules - Violations': { read: true, create: true, update: true, delete: true },
     'Insurance': { read: true, create: true, update: true },
     'Amenities': { read: true, create: true, update: true },
     'Tenancy': { read: true, create: true, update: true },
@@ -145,7 +146,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: true, create: true, update: true },
     'Visitor Logs': { read: true, create: true, update: true },
-    'Documents': { read: true, create: true, update: true, delete: true, export: true },
+    'Documents': { read: true, create: true, update: true, delete: true, export: true, share: true },
     'Communications': { read: true, create: true, update: true, delete: true, approve: true },
     'Integrations': { read: true },
     'Analytics': { read: true },
@@ -170,7 +171,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: false },
     'Architectural Requests': { read: false },
     'Rules': { read: true },
-    'Rules - Violations': { read: true }, // New module
+    'Rules - Violations': { read: true },
     'Insurance': { read: true },
     'Amenities': { read: false },
     'Tenancy': { read: true },
@@ -178,7 +179,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: true },
     'Visitor Logs': { read: false },
-    'Documents': { read: true, create: true, export: true },
+    'Documents': { read: true, create: true, export: true, share: true },
     'Communications': { read: true, create: true, approve: true },
     'Integrations': { read: false },
     'Analytics': { read: true },
@@ -203,7 +204,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: true, create: true, update: true, approve: true },
     'Architectural Requests': { read: true, create: true, update: true, approve: true },
     'Rules': { read: true },
-    'Rules - Violations': { read: true }, // New module
+    'Rules - Violations': { read: true },
     'Insurance': { read: true },
     'Amenities': { read: true },
     'Tenancy': { read: true },
@@ -211,7 +212,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: true },
     'Visitor Logs': { read: true },
-    'Documents': { read: true, export: true },
+    'Documents': { read: true, export: true, share: true },
     'Communications': { read: true },
     'Integrations': { read: false },
     'Analytics': { read: true },
@@ -236,7 +237,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: false },
     'Architectural Requests': { read: true, create: true, update: true },
     'Rules': { read: true },
-    'Rules - Violations': { read: true }, // New module
+    'Rules - Violations': { read: true },
     'Insurance': { read: true },
     'Amenities': { read: true },
     'Tenancy': { read: true, create: true, update: true },
@@ -244,7 +245,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: false },
     'Visitor Logs': { read: true, create: true },
-    'Documents': { read: true, export: true },
+    'Documents': { read: true, export: true, share: true },
     'Communications': { read: true },
     'Integrations': { read: false },
     'Analytics': { read: false },
@@ -269,7 +270,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: false },
     'Architectural Requests': { read: true, create: true, update: true },
     'Rules': { read: true },
-    'Rules - Violations': { read: true }, // New module
+    'Rules - Violations': { read: true },
     'Insurance': { read: true },
     'Amenities': { read: true },
     'Tenancy': { read: true, create: true, update: true },
@@ -277,7 +278,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: false },
     'Visitor Logs': { read: true, create: true },
-    'Documents': { read: true, export: true },
+    'Documents': { read: true, export: true, share: true },
     'Communications': { read: true },
     'Integrations': { read: false },
     'Analytics': { read: false },
@@ -302,7 +303,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: false },
     'Architectural Requests': { read: false },
     'Rules': { read: true },
-    'Rules - Violations': { read: false }, // New module
+    'Rules - Violations': { read: false },
     'Insurance': { read: false },
     'Amenities': { read: false },
     'Tenancy': { read: false },
@@ -310,7 +311,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: false },
     'Portfolio Management': { read: false },
     'Visitor Logs': { read: true, create: true, update: true },
-    'Documents': { read: true },
+    'Documents': { read: true, share: true },
     'Communications': { read: true },
     'Integrations': { read: false },
     'Analytics': { read: false },
@@ -335,7 +336,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: false },
     'Architectural Requests': { read: false },
     'Rules': { read: true },
-    'Rules - Violations': { read: true, create: true, update: true }, // New module
+    'Rules - Violations': { read: true, create: true, update: true },
     'Insurance': { read: true },
     'Amenities': { read: false },
     'Tenancy': { read: false },
@@ -343,7 +344,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: false },
     'Portfolio Management': { read: false },
     'Visitor Logs': { read: true, create: true, update: true },
-    'Documents': { read: true },
+    'Documents': { read: true, share: true },
     'Communications': { read: true },
     'Integrations': { read: false },
     'Analytics': { read: false },
@@ -368,7 +369,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: false },
     'Architectural Requests': { read: false },
     'Rules': { read: true },
-    'Rules - Violations': { read: true, create: true, update: true }, // New module
+    'Rules - Violations': { read: true, create: true, update: true },
     'Insurance': { read: false },
     'Amenities': { read: true, create: true, update: true },
     'Tenancy': { read: true, create: true, update: true },
@@ -376,7 +377,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: false },
     'Visitor Logs': { read: true, create: true, update: true },
-    'Documents': { read: true },
+    'Documents': { read: true, share: true },
     'Communications': { read: true, create: true },
     'Integrations': { read: false },
     'Analytics': { read: false },
@@ -401,7 +402,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: false },
     'Architectural Requests': { read: false },
     'Rules': { read: true },
-    'Rules - Violations': { read: false }, // New module
+    'Rules - Violations': { read: false },
     'Insurance': { read: false },
     'Amenities': { read: false },
     'Tenancy': { read: false },
@@ -409,7 +410,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: false },
     'Portfolio Management': { read: false },
     'Visitor Logs': { read: false },
-    'Documents': { read: true },
+    'Documents': { read: true, share: true },
     'Communications': { read: true },
     'Integrations': { read: false },
     'Analytics': { read: false },
@@ -434,7 +435,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Board - Meetings/Votes': { read: true },
     'Architectural Requests': { read: true },
     'Rules': { read: true },
-    'Rules - Violations': { read: true }, // New module
+    'Rules - Violations': { read: true },
     'Insurance': { read: true },
     'Amenities': { read: true },
     'Tenancy': { read: true },
@@ -442,7 +443,7 @@ const PERMISSIONS_MATRIX: PermissionsMatrix = {
     'Tenancy - Unit Statements': { read: true, export: true },
     'Portfolio Management': { read: true },
     'Visitor Logs': { read: true },
-    'Documents': { read: true, export: true },
+    'Documents': { read: true, export: true, share: true },
     'Communications': { read: true },
     'Integrations': { read: false },
     'Analytics': { read: true },
@@ -481,6 +482,7 @@ export const useAuth = () => {
   const canDelete = (moduleName: string) => checkPermission(moduleName, 'delete');
   const canApprove = (moduleName: string) => checkPermission(moduleName, 'approve');
   const canExport = (moduleName: string) => checkPermission(moduleName, 'export');
+  const canShare = (moduleName: string) => checkPermission(moduleName, 'share'); // Added canShare
   const canPerformSpecial = (moduleName: string) => checkPermission(moduleName, 'special');
 
   return {
@@ -491,6 +493,7 @@ export const useAuth = () => {
     canDelete,
     canApprove,
     canExport,
+    canShare,
     canPerformSpecial,
   };
 };

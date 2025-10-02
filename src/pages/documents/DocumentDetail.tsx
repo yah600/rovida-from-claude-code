@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Edit, Download, FileText, FileSpreadsheet, FileImage, FileQuestion } from 'lucide-react';
+import { MoreHorizontal, Edit, Download, FileText, FileSpreadsheet, FileImage, FileQuestion, Share2, Eye, UploadCloud, MessageSquareText, Clock } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,15 +15,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { mockDocuments, Document } from '@/data/mock-documents';
+import { mockDocumentActivity, DocumentActivity } from '@/data/mock-document-activity';
 import { format } from 'date-fns';
-import { toast } from 'sonner'; // Import toast for actions
-import { useAuth } from '@/hooks/useAuth'; // Import useAuth
+import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/utils';
 
 const DocumentDetail = () => {
   const { id } = useParams();
-  const { t } = useTranslation(['documents', 'common']); // Ensure 'documents' and 'common' namespaces are loaded
-  const { canUpdate, canExport } = useAuth();
+  const { t } = useTranslation(['documents', 'common']);
+  const { canUpdate, canExport, canShare } = useAuth();
 
   const document: Document | undefined = mockDocuments.find((doc) => doc.id === id);
 
@@ -56,14 +59,38 @@ const DocumentDetail = () => {
     }
   };
 
+  const getDocumentActivityIcon = (action: DocumentActivity['action']) => {
+    switch (action) {
+      case 'viewed':
+        return <Eye className="h-4 w-4 text-rovida-slate-green-gray" />;
+      case 'downloaded':
+        return <Download className="h-4 w-4 text-rovida-navy" />;
+      case 'shared':
+        return <Share2 className="h-4 w-4 text-rovida-gold" />;
+      case 'edited':
+        return <Edit className="h-4 w-4 text-rovida-success" />;
+      case 'uploaded':
+        return <UploadCloud className="h-4 w-4 text-rovida-gold" />;
+      default:
+        return <Clock className="h-4 w-4 text-rovida-slate-green-gray" />;
+    }
+  };
+
   const handleEditDocument = () => {
-    toast.info(t('edit document action', { ns: 'documents', id: document.id })); // Placeholder action with toast
+    toast.info(t('edit document action', { ns: 'documents', id: document.id }));
   };
 
   const handleDownloadDocument = () => {
-    toast.success(t('download document action', { ns: 'documents', title: document.title })); // Placeholder action with toast
-    window.open(document.url, '_blank'); // Open the actual URL
+    toast.success(t('download document action', { ns: 'documents', title: document.title }));
+    window.open(document.url, '_blank');
   };
+
+  const handleShareDocument = () => {
+    toast.info(t('share document action', { ns: 'documents', title: document.title }));
+  };
+
+  const documentActivities = mockDocumentActivity.filter(activity => activity.documentId === document.id)
+    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -96,43 +123,85 @@ const DocumentDetail = () => {
                   </button>
                 </DropdownMenuItem>
               )}
+              {canShare('Documents') && (
+                <DropdownMenuItem className="hover:bg-rovida-soft-gray" onClick={handleShareDocument}>
+                  <Share2 className="mr-2 h-4 w-4" /> {t('share', { ns: 'documents' })}
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </header>
 
-      <Card className="card-rovida">
-        <CardHeader>
-          <CardTitle className="text-rovida-navy">{t('document details', { ns: 'documents' })}</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="grid grid-cols-2 gap-2 text-rovida-near-black">
-            <div className="font-medium">{t('id', { ns: 'common' })}:</div>
-            <div>{document.id}</div>
-            <div className="font-medium">{t('category', { ns: 'finance' })}:</div>
-            <div>{document.category}</div>
-            <div className="font-medium">{t('uploaded by', { ns: 'documents' })}:</div>
-            <div>{document.uploadedBy}</div>
-            <div className="font-medium">{t('uploaded at', { ns: 'documents' })}:</div>
-            <div>{format(document.uploadedAt, 'MMM dd, yyyy HH:mm')}</div>
-          </div>
-          <Separator className="bg-rovida-soft-gray" />
-          <div>
-            <h4 className="font-medium mb-2 text-rovida-navy">{t('preview', { ns: 'documents' })}:</h4>
-            <div className="w-full h-64 bg-rovida-soft-gray flex items-center justify-center rounded-md overflow-hidden">
-              {/* Placeholder for document preview */}
-              {document.type === 'Image' ? (
-                <img src={document.url} alt="Document Preview" className="max-w-full max-h-full object-contain" />
+      <Tabs defaultValue="overview" className="flex-1">
+        <TabsList className="grid w-full grid-cols-2 bg-rovida-soft-gray/50 backdrop-blur-xl border-rovida-soft-gray">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-rovida-navy data-[state=active]:text-white data-[state=active]:shadow-subtle text-rovida-near-black">{t('overview', { ns: 'common' })}</TabsTrigger>
+          <TabsTrigger value="activity-log" className="data-[state=active]:bg-rovida-navy data-[state=active]:text-white data-[state=active]:shadow-subtle text-rovida-near-black">{t('activity log', { ns: 'documents' })}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview" className="mt-4">
+          <Card className="card-rovida">
+            <CardHeader>
+              <CardTitle className="text-rovida-navy">{t('document details', { ns: 'documents' })}</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              <div className="grid grid-cols-2 gap-2 text-rovida-near-black">
+                <div className="font-medium">{t('id', { ns: 'common' })}:</div>
+                <div>{document.id}</div>
+                <div className="font-medium">{t('category', { ns: 'finance' })}:</div>
+                <div>{document.category}</div>
+                <div className="font-medium">{t('uploaded by', { ns: 'documents' })}:</div>
+                <div>{document.uploadedBy}</div>
+                <div className="font-medium">{t('uploaded at', { ns: 'documents' })}:</div>
+                <div>{format(document.uploadedAt, 'MMM dd, yyyy HH:mm')}</div>
+              </div>
+              <Separator className="bg-rovida-soft-gray" />
+              <div>
+                <h4 className="font-medium mb-2 text-rovida-navy">{t('preview', { ns: 'documents' })}:</h4>
+                <div className="w-full h-64 bg-rovida-soft-gray flex items-center justify-center rounded-md overflow-hidden">
+                  {document.type === 'Image' ? (
+                    <img src={document.url} alt="Document Preview" className="max-w-full max-h-full object-contain" />
+                  ) : (
+                    <img src="/public/placeholder.svg" alt="Document Preview" className="max-w-full max-h-full object-contain" />
+                  )}
+                </div>
+                <p className="text-sm text-rovida-slate-green-gray mt-2">
+                  {t('placeholder preview text', { ns: 'documents' })}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="activity-log" className="mt-4">
+          <Card className="card-rovida">
+            <CardHeader>
+              <CardTitle className="text-rovida-navy">{t('document activity log', { ns: 'documents' })}</CardTitle>
+              <CardDescription className="text-rovida-slate-green-gray">{t('track all actions related to this document', { ns: 'documents' })}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {documentActivities.length > 0 ? (
+                <ol className="relative border-l border-rovida-soft-gray ml-4">
+                  {documentActivities.map((activity) => (
+                    <li key={activity.id} className="mb-6 ml-6">
+                      <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-white ring-8 ring-white dark:bg-rovida-near-black dark:ring-rovida-near-black">
+                        {getDocumentActivityIcon(activity.action)}
+                      </span>
+                      <h3 className="flex items-center mb-1 text-lg font-semibold text-rovida-near-black">
+                        {t(activity.action, { ns: 'documents' })} {t('by', { ns: 'common' })} {activity.user}
+                        <time className="block ml-2 text-sm font-normal leading-none text-rovida-slate-green-gray">
+                          {format(activity.timestamp, 'MMM dd, yyyy HH:mm')}
+                        </time>
+                      </h3>
+                      <p className="mb-4 text-base font-normal text-rovida-slate-green-gray">{activity.details}</p>
+                    </li>
+                  ))}
+                </ol>
               ) : (
-                <img src="/public/placeholder.svg" alt="Document Preview" className="max-w-full max-h-full object-contain" />
+                <p className="text-rovida-slate-green-gray">{t('no activity logs', { ns: 'documents' })}</p>
               )}
-            </div>
-            <p className="text-sm text-rovida-slate-green-gray mt-2">
-              {t('placeholder preview text', { ns: 'documents' })}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

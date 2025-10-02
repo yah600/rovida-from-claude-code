@@ -37,5 +37,16 @@
   "reviewed": "Examiné",
   "archived": "Archivé",
   "view document action": "Action de voir le document déclenchée pour {{title}}.",
-  "upload document action": "Action de télécharger un document déclenchée."
+  "upload document action": "Action de télécharger un document déclenchée.",
+  "share": "Partager",
+  "share document action": "Action de partager le document déclenchée pour {{title}}.",
+  "activity log": "Journal d'activité",
+  "document activity log": "Journal d'activité du document",
+  "track all actions related to this document": "Suivez toutes les actions liées à ce document, y compris les vues, les téléchargements et les partages.",
+  "no activity logs": "Aucun journal d'activité trouvé pour ce document.",
+  "viewed": "Vu",
+  "downloaded": "Téléchargé",
+  "shared": "Partagé",
+  "edited": "Modifié",
+  "uploaded": "Téléchargé"
 }
