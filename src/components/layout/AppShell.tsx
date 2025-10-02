@@ -68,7 +68,7 @@ const AppShell = () => {
   ].filter(Boolean); // Filter out any null/false values
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <div className="flex min-h-screen w-full bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <Sidebar className="w-[var(--sidebar-width)] flex-shrink-0" />
       <div className="flex flex-1 flex-col">
         <Topbar />

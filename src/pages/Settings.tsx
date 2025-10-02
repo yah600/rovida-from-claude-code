@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Settings as SettingsIcon } from 'lucide-react';
 import GlassSurface from '@/components/GlassSurface';
+import UserSwitcher from './settings/UserSwitcher';
+import { MOCKS_ENABLED } from '@/mocks/config';
 
 const Settings = () => {
-  const { t } = useTranslation(['settings', 'common']); // Ensure 'settings' and 'common' namespaces are loaded
+  const { t } = useTranslation(['settings', 'common']);
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -26,6 +28,8 @@ const Settings = () => {
           </CardContent>
         </Card>
       </GlassSurface>
+
+      {MOCKS_ENABLED && <UserSwitcher />}
 
       <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm p-8 card-rovida">
         <p className="text-rovida-slate-green-gray">{t('explore settings navigation left', { ns: 'settings' })}</p>

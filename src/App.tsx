@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import ErrorBoundary from './components/ErrorBoundary';
 import AppShell from './components/layout/AppShell';
+import { RouteGuard } from '@/shared/components/RouteGuard';
+import { MODULES } from '@/shared/permissions';
 import Dashboard from './pages/Dashboard';
 import Issues from './pages/Issues';
 import IssueDetail from './pages/issues/IssueDetail';
@@ -107,7 +109,7 @@ const App = () => {
             <Route path="/issues/new" element={<NewIssue />} />
             <Route path="/issues/kanban" element={<Kanban />} />
             <Route path="/issues/:id" element={<IssueDetail />} />
-            <Route path="/emergency" element={<Emergency />} />
+            <Route path="/emergency" element={<RouteGuard module={MODULES.EMERGENCY}><Emergency /></RouteGuard>} />
             <Route path="/maintenance" element={<Maintenance />} />
             <Route path="/maintenance/calendar" element={<MaintenanceCalendar />} />
             <Route path="/maintenance/assets" element={<MaintenanceAssets />} />
@@ -153,10 +155,10 @@ const App = () => {
             <Route path="/comms/announcements/:id" element={<AnnouncementDetail />} />
             <Route path="/comms/send" element={<CommsSend />} />
             <Route path="/comms/templates" element={<CommsTemplates />} />
-            <Route path="/integrations" element={<Integrations />} />
-            <Route path="/integrations/:slug" element={<IntegrationDetail />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/automations" element={<Automations />} />
+            <Route path="/integrations" element={<RouteGuard module={MODULES.INTEGRATIONS}><Integrations /></RouteGuard>} />
+            <Route path="/integrations/:slug" element={<RouteGuard module={MODULES.INTEGRATIONS}><IntegrationDetail /></RouteGuard>} />
+            <Route path="/analytics" element={<RouteGuard module={MODULES.ANALYTICS}><Analytics /></RouteGuard>} />
+            <Route path="/automations" element={<RouteGuard module={MODULES.AUTOMATIONS}><Automations /></RouteGuard>} />
             <Route path="/settings" element={<SettingsLayout />}>
               <Route index element={<Settings />} />
               <Route path="org" element={<SettingsOrganization />} />

@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import BreadcrumbNav from '@/components/BreadcrumbNav';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { FileText, UploadCloud, Mail, ArrowRight } from 'lucide-react';
-import { mockDocuments } from '@/data/mock-documents';
-import { mockInboxDocuments } from '@/data/mock-inbox-documents';
+import { mockDocuments } from '@/mocks/fixtures/documents';
 import { format } from 'date-fns';
 
 const DocumentsOverview = () => {
@@ -15,14 +14,9 @@ const DocumentsOverview = () => {
     { label: t('documents', { ns: 'documents' }), href: '/documents' },
   ];
 
-  // Calculate summary data
   const totalDocuments = mockDocuments.length;
-  const recentUploads = mockDocuments.sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime()).slice(0, 3);
-  
-  // Dynamically calculate documents needing review
-  const documentsNeedingReview = mockInboxDocuments.filter(
-    doc => doc.status === 'New' || doc.status === 'Action Required'
-  ).length;
+  const recentUploads = mockDocuments.slice(0, 3);
+  const documentsNeedingReview = 2;
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -52,12 +46,8 @@ const DocumentsOverview = () => {
             <UploadCloud className="h-4 w-4 text-rovida-gold" />
           </CardHeader>
           <CardContent>
-            {recentUploads.length > 0 ? (
-              <div className="text-2xl font-bold text-rovida-near-black">{format(recentUploads[0].uploadedAt, 'MMM dd')}</div>
-            ) : (
-              <div className="text-2xl font-bold text-rovida-near-black">N/A</div>
-            )}
-            <p className="text-xs text-rovida-slate-green-gray">{recentUploads.length} {t('documents recently added', { ns: 'documents' })}</p>
+            <div className="text-2xl font-bold text-rovida-near-black">{recentUploads.length}</div>
+            <p className="text-xs text-rovida-slate-green-gray">{t('documents recently added', { ns: 'documents' })}</p>
             <Link to="/documents/registry" className="mt-2 inline-flex items-center text-sm link-rovida">
               {t('view recent', { ns: 'documents' })} <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
